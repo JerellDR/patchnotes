@@ -37,7 +37,6 @@ function gameObject(){
     };
 
     this.controlsMenu = new controlsMenu();
-
     this.KeyBinds = stockKeyBinds;
 
     this.menuTimerMax = 1;
@@ -84,7 +83,7 @@ function gameObject(){
         this.menuTimer -= dt;
 
         //Handle Menu Switches
-        if(game.keys[77]){
+        if(game.keys[27]){
             if(this.menuTimer < 0){
                 if(this.screen == "MENU"){
                     this.screen = "GAME";
