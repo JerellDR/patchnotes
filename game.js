@@ -131,36 +131,21 @@ function gameObject(){
     }
 
     this.updateGame = function(dt){
+
+        for(var p = 0; p < game.players.length; p++){
+            game.players[p].update(dt);
+        } 
+
+        this.currentSector.update(dt);
+
             // if(game.keys[82]){
         // console.log("new!");
         // game = new gameObject();
         // game.init();
         // }
-
-
-        //Example of update loop
-        for(var p = 0; p < game.players.length; p++){
-            game.players[p].update(dt);
-        } 
-
-        for(var b = 0; b < game.boxes.length; b++){
-            game.boxes[b].update(dt);
-        }
-
-        for(var c = 0; c < game.coordinates.length; c++){
-            game.coordinates[c].update(dt);
-        }
-
-        for(var c = 0; c < game.streamers.length; c++){
-            game.streamers[c].update(dt);
-        }
-
-        game.bulletManager.update(dt);
-
-        game.enemyManager.update(dt);
     }
            
-        
+    
     //Physics Variables
     //this.gravity = 10;
     this.gravity = 0;
@@ -174,20 +159,20 @@ function gameObject(){
     this.keys = [];
     this.buttons = [];
     this.meters = [];
-    
-    this.pillars = [];
+
     this.players = [];
     this.boxes = [];
     this.coordinates = [];
-    this.bullets = [];
-    this.followBots = [];
+
+    this.currentSector = new worldSector(0, 0);
+    this.sectors = [];
 
     this.streamers = [];
 
     this.drawType = "player";
 
-    this.bulletManager = new bulletManager();
-    this.enemyManager = new enemyManager();
+    //this.bulletManager = new bulletManager();
+    //this.enemyManager = new enemyManager();
 
     //Timers
     
@@ -207,23 +192,60 @@ function gameObject(){
             this.coordinates.push(new coordinate(x, -x));
         }
 
-        
+        for(var x = 0; x < 5; x++){
+            this.sectors.push([]);
+            for(var y = 0; y < 5; y++){
+                this.sectors[x].push(undefined);
+            }
 
-        this.pillars.push(new pillar(70, 40, 5, 100, 0));
-        this.pillars.push(new pillar(-70, 40, 5, 100, 0));
+        }
 
-        this.pillars.push(new pillar(90, 40, 5, 100, 1));
-        this.pillars.push(new pillar(-90, 40, 5, 100, 1));
 
-        this.enemyManager.addEnemy(new followBot(this.players[0].x + 30, this.players[0].y + 60));
-        this.enemyManager.addEnemy(new followBot(this.players[0].x + 10, this.players[0].y + 60));
-        this.enemyManager.addEnemy(new followBot(this.players[0].x - 40, this.players[0].y + 60));
-        this.enemyManager.addEnemy(new followBot(this.players[0].x - 20, this.players[0].y + 60));
 
-        this.enemyManager.addEnemy(new followBot(this.players[0].x + 30, this.players[0].y - 60));
-        this.enemyManager.addEnemy(new followBot(this.players[0].x + 10, this.players[0].y - 60));
-        this.enemyManager.addEnemy(new followBot(this.players[0].x - 40, this.players[0].y - 60));
-        this.enemyManager.addEnemy(new followBot(this.players[0].x - 20, this.players[0].y - 60));
+        this.currentSector.pillars.push(new pillar(70, 40, 5, 100, 0));
+        this.currentSector.pillars.push(new pillar(-70, 40, 5, 100, 0));
+
+        this.currentSector.pillars.push(new pillar(90, 40, 5, 100, 1));
+        this.currentSector.pillars.push(new pillar(-90, 40, 5, 100, 1));
+
+        this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x + 30, this.players[0].y + 60, 1));
+
+        this.sectors[0][0] = new worldSector(0, 0);
+        this.sectors[0][1] = new worldSector(0, 1);
+
+
+        this.sectors[0][0].pillars.push(new pillar(70, 40, 5, 100, 0));
+        this.sectors[0][0].pillars.push(new pillar(-70, 40, 5, 100, 0));
+
+        this.sectors[0][0].pillars.push(new pillar(90, 40, 5, 100, 1));
+        this.sectors[0][0].pillars.push(new pillar(-90, 40, 5, 100, 1));
+
+        this.sectors[0][0].enemyManager.addEnemy(new followBot(- 30, this.players[0].y + 60, 1));
+        this.sectors[0][0].enemyManager.addEnemy(new followBot( - 10, this.players[0].y + 60, 1));
+        this.sectors[0][0].enemyManager.addEnemy(new followBot(20, this.players[0].y + 60, 1));
+
+
+        this.sectors[0][1].pillars.push(new pillar(70, 440, 5, 100, 0));
+        this.sectors[0][1].pillars.push(new pillar(-70, 440, 5, 100, 0));
+
+        this.sectors[0][1].pillars.push(new pillar(90, 440, 5, 100, 1));
+        this.sectors[0][1].pillars.push(new pillar(-90, 440, 5, 100, 1));
+
+        this.sectors[0][1].enemyManager.addEnemy(new followBot(30, 460, 0));
+        this.sectors[0][1].enemyManager.addEnemy(new followBot(70, 460, 0));
+        this.sectors[0][1].enemyManager.addEnemy(new followBot(-10, 460, 0));
+
+
+        this.currentSector = this.sectors[0][0];
+
+        // this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x + 10, this.players[0].y + 60, 1));
+        // this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x - 40, this.players[0].y + 60, 1, 0));
+        // this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x - 20, this.players[0].y + 60, 1));
+
+        // this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x + 30, this.players[0].y - 60, 0));
+        // this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x + 10, this.players[0].y - 60, 0));
+        // this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x - 40, this.players[0].y - 60, 0));
+        // this.currentSector.enemyManager.addEnemy(new followBot(this.players[0].x - 20, this.players[0].y - 60, 0));
 
         //this.followBots.push(new followBot(10, 10));
 
@@ -235,6 +257,7 @@ function gameObject(){
         this.lastTime = Date.now();
         this.nowTime = this.lastTime;
     }
+    
     
     this.levelUp = function(){
         this.currentLevelTimer = 0;            

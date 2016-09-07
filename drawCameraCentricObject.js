@@ -13,32 +13,39 @@ function drawCameraCentricObject(cameraX, cameraY){
             
             this.drawGrid();
 
-            
+            // for(var b = 0; b < game.currentSector.coordinates.length; b++){
+            //     game.coordinates[b].draw();
+            // }
 
-            for(var b = 0; b < game.boxes.length; b++){
-                game.boxes[b].draw();
+            for(var p = 0; p < game.currentSector.pillars.length; p++){                
+                game.currentSector.pillars[p].draw();
             }
+
+            game.currentSector.bulletManager.draw();
+
+            game.currentSector.enemyManager.draw();
+
 
             for(var b = 0; b < game.coordinates.length; b++){
                 game.coordinates[b].draw();
             }
 
-            for(var p = 0; p < game.pillars.length; p++){                
-                game.pillars[p].draw();
-            }
+            // for(var p = 0; p < game.pillars.length; p++){                
+            //     game.pillars[p].draw();
+            // }
 
-            for(var b = 0; b < game.streamers.length; b++){
-                game.streamers[b].draw();
-            }
+            // for(var b = 0; b < game.streamers.length; b++){
+            //     game.streamers[b].draw();
+            // }
 
             for(var p = 0; p < game.players.length; p++){                
                 game.players[p].draw();
             }
 
 
-            game.bulletManager.draw();
+            // game.bulletManager.draw();
 
-            game.enemyManager.draw();
+            // game.enemyManager.draw();
 
 
             ctx.stroke();    
@@ -49,6 +56,7 @@ function drawCameraCentricObject(cameraX, cameraY){
             ctx.rect(0, gameCanvas.height - gameYToCanvasY(20), gameCanvas.width, gameCanvas.height);       
             ctx.stroke();
             ctx.fill();
+            draw.drawInfoText(10, 15, "Life: " + game.players[0].currentLife);
             ctx.closePath();
 
             // draw.drawFilledRectCentered(game.gameWidth/2, game.gameHeight/2, game.gameWidth, game.gameHeight - gameYToCanvasY(20), "#0000FF");                   
@@ -119,16 +127,19 @@ function drawCameraCentricObject(cameraX, cameraY){
         ctx.strokeStyle = "#00FF00";
         ctx.fillStyle = "#00FF00";
         //(text, gameXToCanvasX(gameX + game.gameWidth/2 - cameraX), gameYToCanvasY(-gameY + game.gameHeight/2 + cameraY))        ;
-        for(var x = -10; x < 11; x++)    
-        {
+
+        //horizontal lines
+        for(var x = -game.currentSector.height/40; x <= game.currentSector.height/40; x++){
             ctx.beginPath();
-            ctx.moveTo(gameXToCanvasX(-200 + game.gameWidth/2 - this.cameraX), gameYToCanvasY(x*20 + game.gameHeight/2 + this.cameraY));
-            ctx.lineTo(gameXToCanvasX(200 + game.gameWidth/2 - this.cameraX), gameYToCanvasY(x*20 + game.gameHeight/2 + this.cameraY));
+            ctx.moveTo(gameXToCanvasX(-game.currentSector.width/2 + game.gameWidth/2 - this.cameraX + 400*game.currentSector.x), gameYToCanvasY(x*20 + game.gameHeight/2 + this.cameraY - 400*game.currentSector.y));
+            ctx.lineTo(gameXToCanvasX(game.currentSector.width/2 + game.gameWidth/2 - this.cameraX + 400*game.currentSector.x), gameYToCanvasY(x*20 + game.gameHeight/2 + this.cameraY - 400*game.currentSector.y));
             ctx.stroke();
-            
+        }
+        //vertical lines
+        for(var x = -game.currentSector.width/40; x <= game.currentSector.width/40; x++){   
             ctx.beginPath();
-            ctx.moveTo(gameXToCanvasX(x*20 + game.gameWidth/2 - this.cameraX), gameYToCanvasY(-200 + game.gameHeight/2 + this.cameraY));
-            ctx.lineTo(gameXToCanvasX(x*20 + game.gameWidth/2 - this.cameraX), gameYToCanvasY(200 + game.gameHeight/2 + this.cameraY));
+            ctx.moveTo(gameXToCanvasX(x*20 + game.gameWidth/2 - this.cameraX + 400*game.currentSector.x), gameYToCanvasY(-game.currentSector.height/2 + game.gameHeight/2 + this.cameraY - 400*game.currentSector.y));
+            ctx.lineTo(gameXToCanvasX(x*20 + game.gameWidth/2 - this.cameraX + 400*game.currentSector.x), gameYToCanvasY(game.currentSector.height/2 + game.gameHeight/2 + this.cameraY - 400*game.currentSector.y));
             ctx.stroke();
         }
     }
@@ -251,12 +262,14 @@ function drawCameraCentricObject(cameraX, cameraY){
         ctx.restore();
     }
 
-    this.drawText = function(gameX, gameY, text)
+    this.drawText = function(gameX, gameY, text, color)
     {
         var ctx = game.ctx;
         ctx.save();
         ctx.beginPath();
         ctx.fillStyle = "#00FF00";
+        if(color != undefined)
+            ctx.fillStyle = color;
         ctx.fillText(text, gameXToCanvasX(gameX + game.gameWidth/2 - this.cameraX), gameYToCanvasY(-gameY + game.gameHeight/2 + this.cameraY))        ;    
         ctx.stroke();
         ctx.restore();
