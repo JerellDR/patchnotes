@@ -8,6 +8,11 @@ function keyDown(event){
   console.log(event.keyCode);
 }
 
+function keyPress(event){ 
+  game.keys[event.keyCode] = true;
+  console.log(event.keyCode);
+}
+
 function keyUp(event){ 
   game.keys[event.keyCode] = false;
 }

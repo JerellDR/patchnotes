@@ -72,8 +72,9 @@ function drawCameraCentricObject(cameraX, cameraY){
         draw.drawInfoText(15, game.gameHeight - 10 - 5*row, "Common");
         row++;
         for (var prop in game.KeyBinds.Common){
-            
-             draw.drawInfoText(20, game.gameHeight - 10 - 5*row, prop + ": " + String.fromCharCode(game.KeyBinds.Common[prop]));
+             
+             var key = game.KeyBinds.Common[prop]; 
+             draw.drawInfoText(20, game.gameHeight - 10 - 5*row, prop + ": " + String.fromCharCode(key));
              row++;
         }
 
@@ -81,15 +82,17 @@ function drawCameraCentricObject(cameraX, cameraY){
         row++;
         for (var prop in game.KeyBinds.Ship){
             
-             draw.drawInfoText(20, game.gameHeight - 10 - 5*row, prop + ": " + String.fromCharCode(game.KeyBinds.Ship[prop]));
+             var key = game.KeyBinds.Ship[prop]
+             draw.drawInfoText(20, game.gameHeight - 10 - 5*row, prop + ": " + String.fromCharCode(key));
              row++;
         }
 
         draw.drawInfoText(15, game.gameHeight - 10 - 5*row, "Bot");
         row++;
         for (var prop in game.KeyBinds.Bot){
-            
-             draw.drawInfoText(20, game.gameHeight - 10 - 5*row, prop + ": " + String.fromCharCode(game.KeyBinds.Bot[prop]));
+             
+             var key = game.KeyBinds.Bot[prop]
+             draw.drawInfoText(20, game.gameHeight - 10 - 5*row, prop + ": " + String.fromCharCode(key));
              row++;
         }
             
